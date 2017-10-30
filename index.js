@@ -13,13 +13,12 @@ function handleConnection(conn) {
 
   conn.setEncoding('hex');
 
-  var str = Encoding('utf8').getBytes("1040014116").toString("hex");
-
-  conn.write(str);
-
   conn.on('data', onConnData);
   conn.once('close', onConnClose);
   conn.on('error', onConnError);
+
+  conn.write("1040014116");
+
 
   function onConnData(d) {
     console.log('connection data from %s: %j', remoteAddress, d);
