@@ -1,10 +1,8 @@
+const express = require('express')
+const app = express();
 
-const net = require('net')
-
-
-var server = net.createServer(function(socket) {
-	socket.write('Echo server\r\n');
-	socket.pipe(socket);
-});
-
-server.listen(3000, '127.0.0.1');
+app.get('/', function (req, res) {
+  res.send('Hello World')
+  console.log("here");
+})
+app.listen(3000, () => console.log('Server running on port 3000'))
