@@ -11,7 +11,9 @@ function handleConnection(conn) {
   var remoteAddress = conn.remoteAddress + ':' + conn.remotePort;
   console.log('new client connection from %s', remoteAddress);
 
-  conn.setEncoding('utf8');
+  conn.setEncoding('hex');
+
+  conn.write("1040014116");
 
   conn.on('data', onConnData);
   conn.once('close', onConnClose);
