@@ -13,7 +13,9 @@ function handleConnection(conn) {
 
   conn.setEncoding('hex');
 
-  conn.write(1040014116);
+  var str = Encoding('utf8').getBytes("1040014116").toString("hex");
+
+  conn.write(str);
 
   conn.on('data', onConnData);
   conn.once('close', onConnClose);
@@ -21,7 +23,6 @@ function handleConnection(conn) {
 
   function onConnData(d) {
     console.log('connection data from %s: %j', remoteAddress, d);
-    conn.write(d.toUpperCase());
   }
 
   function onConnClose() {
