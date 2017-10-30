@@ -13,7 +13,7 @@ function handleConnection(conn) {
 
   conn.setEncoding('hex');
 
-  conn.write("1040014116");
+  conn.write(1040014116);
 
   conn.on('data', onConnData);
   conn.once('close', onConnClose);
