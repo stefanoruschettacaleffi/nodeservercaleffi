@@ -10,12 +10,10 @@ server.listen(3000, function() {
 function handleConnection(conn) {
   var remoteAddress = conn.remoteAddress + ':' + conn.remotePort;
   console.log('new client connection from %s', remoteAddress);
-
+  /*
   conn.on('data', onConnData);
   conn.once('close', onConnClose);
   conn.on('error', onConnError);
-
-  conn.write('hold my beer');
 
   function onConnData(d) {
     console.log('connection data from %s: %j', remoteAddress, d);
@@ -29,4 +27,5 @@ function handleConnection(conn) {
   function onConnError(err) {
     console.log('Connection %s error: %s', remoteAddress, err.message);
   }
+  */
 }
