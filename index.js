@@ -11,17 +11,11 @@ function handleConnection(conn) {
   var remoteAddress = conn.remoteAddress + ':' + conn.remotePort;
   console.log('new client connection from %s', remoteAddress);
 
-
-
-
   conn.on('data', onConnData);
   conn.once('close', onConnClose);
   conn.on('error', onConnError);
 
   conn.write('hold my beer');
-  conn.close(function(){
-    console.log("closing");
-  });
 
   function onConnData(d) {
     console.log('connection data from %s: %j', remoteAddress, d);
