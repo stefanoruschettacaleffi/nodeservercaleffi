@@ -17,8 +17,7 @@ function handleConnection(conn) {
   conn.once('close', onConnClose);
   conn.on('error', onConnError);
 
-  conn.write("1040014116");
-
+  conn.write(parseInt("1040014116", 16).toString(16));
 
   function onConnData(d) {
     console.log('connection data from %s: %j', remoteAddress, d);
