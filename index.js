@@ -19,7 +19,9 @@ function handleConnection(conn) {
   conn.on('error', onConnError);
 
   conn.write('hold my beer');
-  conn.close();
+  conn.close(function(){
+    console.log("closing");
+  });
 
   function onConnData(d) {
     console.log('connection data from %s: %j', remoteAddress, d);
