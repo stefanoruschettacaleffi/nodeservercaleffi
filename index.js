@@ -1,12 +1,32 @@
-const express = require('express')
-const app = express();
+var net = require('net');
 
-app.get('/', function (req, res) {
-  res.send('Hello World')
+var server = net.createServer();
+server.on('connection', handleConnection);
 
-  var ip = req.headers['X-Real-IP'] || req.connection.remoteAddress;
+server.listen(3000, function() {
+  console.log('server listening to %j', server.address());
+});
 
-  console.log("request ip: " + ip);
-})
+function handleConnection(conn) {
+  var remoteAddress = conn.remoteAddress + ':' + conn.remotePort;
+  console.log('new client connection from %s', remoteAddress);
 
-app.listen(3000, () => console.log('Server running on port 3000!'))
+  conn.setEncoding('utf8');
+
+  conn.on('data', onConnData);
+  conn.once('close', onConnClose);
+  conn.on('error', onConnError);
+
+  function onConnData(d) {
+    console.log('connection data from %s: %j', remoteAddress, d);
+    conn.write(d.toUpperCase());
+  }
+
+  function onConnClose() {
+    console.log('connection from %s closed', remoteAddress);
+  }
+
+  function onConnError(err) {
+    console.log('Connection %s error: %s', remoteAddress, err.message);
+  }
+}
