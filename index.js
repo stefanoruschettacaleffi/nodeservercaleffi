@@ -22,7 +22,8 @@ function handleConnection(conn) {
   function onConnData(d) {
     console.log('connection data from %s: %j', remoteAddress, d);
     if(d == "e5"){
-      conn.write("107B017C16", "hex");
+      //conn.write("107B017C16", "hex");
+      conn.disconnect();
     }
   }
 
