@@ -7,6 +7,9 @@ server.listen(3000, function() {
   console.log('server listening to %j', server.address());
 });
 
+
+var currentConnection = null;
+
 function handleConnection(conn) {
   var remoteAddress = conn.remoteAddress + ':' + conn.remotePort;
   console.log('new client connection from %s', remoteAddress);
@@ -19,11 +22,13 @@ function handleConnection(conn) {
 
   conn.write("1040014116", "hex");
 
+  currentConnection = conn;
+
   function onConnData(d) {
     console.log('connection data from %s: %j', remoteAddress, d);
     if(d == "e5"){
       //conn.write("107B017C16", "hex");
-      conn.disconnect();
+      currentConnection.disconnect();
     }
   }
 
