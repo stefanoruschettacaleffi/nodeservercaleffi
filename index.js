@@ -24,6 +24,11 @@ function handleConnection(conn) {
     if(d == "e5"){
       conn.write("107B017C16", "hex");
     }
+    else {
+      conn.close(function(){
+        console.log("closing connection");
+      })
+    }
   }
 
   function onConnClose() {
