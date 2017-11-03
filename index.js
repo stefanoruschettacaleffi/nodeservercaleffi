@@ -27,10 +27,8 @@ function handleConnection(conn) {
   function onConnData(d) {
     console.log('connection data from %s: %j', remoteAddress, d);
     if(d == "e5"){
-      conn.write("+", "utf-8");
-      setTimeout(sendPlus, 200);
-      setTimeout(sendPlus, 400);
-      setTimeout(sendPlus, 600);
+      console.log("trying to disconnect.");
+      conn.end();
     }
   }
 
@@ -40,9 +38,5 @@ function handleConnection(conn) {
 
   function onConnError(err) {
     console.log('Connection %s error: %s', remoteAddress, err.message);
-  }
-
-  function sendPlus(){
-    conn.write("+");
   }
 }
