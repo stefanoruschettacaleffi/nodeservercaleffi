@@ -25,7 +25,7 @@ function handleConnection(conn) {
   currentConnection = conn;
 
   function onConnData(d) {
-    console.log('connection data from %s: %j', remoteAddress, d);
+    console.log('connection data fr om %s: %j', remoteAddress, d);
     if(d == "e5"){
       conn.end();
     }
