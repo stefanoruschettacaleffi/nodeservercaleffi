@@ -29,9 +29,9 @@ function handleConnection(conn) {
     if(d == "e5"){
       //console.log("trying to disconnect.");
       setTimeout(
-        2000, function(){
+        function(){
           conn.write("105B015C16", "hex");
-        }
+        }, 2000
       );
       //conn.end();
     }
