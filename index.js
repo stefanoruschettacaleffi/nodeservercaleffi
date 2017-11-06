@@ -26,10 +26,10 @@ function handleConnection(conn) {
 
   function onConnData(d) {
     console.log('connection data from %s: %j', remoteAddress, d);
-    if(d == "e5"){
-      console.log("trying to disconnect.");
+    //if(d == "e5"){
+      //console.log("trying to disconnect.");
       conn.end();
-    }
+    //}
   }
 
   function onConnClose() {
