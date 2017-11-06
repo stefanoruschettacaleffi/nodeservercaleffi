@@ -27,7 +27,12 @@ function handleConnection(conn) {
   function onConnData(d) {
     console.log('connection data from %s: %j', remoteAddress, d);
     if(d == "e5"){
-      conn.end();
+      //console.log("trying to disconnect.");
+      setTimeout(
+        function(){
+          currentConnection.write("105B015C16", "hex");
+        }, 2000);
+      //conn.end();
     }
   }
 
