@@ -27,7 +27,7 @@ function handleConnection(conn) {
   function onConnData(d) {
     console.log('connection data from %s: %j', remoteAddress, d);
     if(d == "e5"){
-      //console.log("trying to disconnect.");
+      console.log("Ack received.");
       setTimeout(
         function(){
           currentConnection.write("105B015C16", "hex");
