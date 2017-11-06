@@ -28,10 +28,7 @@ function handleConnection(conn) {
     console.log('connection data from %s: %j', remoteAddress, d);
     if(d == "e5"){
       console.log("Ack received.");
-      setTimeout(
-        function(){
-          currentConnection.write("105B015C16", "hex");
-        }, 2000);
+      currentConnection.write("1040014116", "hex");
       //conn.end();
     }
   }
