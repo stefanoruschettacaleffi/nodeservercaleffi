@@ -28,7 +28,7 @@ function handleConnection(conn) {
     console.log('connection data from %s: %j', remoteAddress, d);
     if(d == "e5"){
       console.log("trying to disconnect.");
-      conn.end();
+      //conn.end();
     }
   }
 
