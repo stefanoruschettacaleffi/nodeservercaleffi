@@ -26,10 +26,11 @@ function handleConnection(conn) {
 
   function onConnData(d) {
     console.log('connection data from %s: %j', remoteAddress, d);
-    //if(d == "e5"){
+    if(d == "e5"){
       //console.log("trying to disconnect.");
-      conn.end();
-    //}
+      conn.write("105b015c16", "hex");
+      //conn.end();
+    }
   }
 
   function onConnClose() {
