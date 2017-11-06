@@ -20,7 +20,7 @@ function handleConnection(conn) {
   conn.once('close', onConnClose);
   conn.on('error', onConnError);
 
-  conn.write("1040014116", "hex");
+  conn.write("105B015C16", "hex");
 
   currentConnection = conn;
 
@@ -28,7 +28,7 @@ function handleConnection(conn) {
     console.log('connection data from %s: %j', remoteAddress, d);
     if(d == "e5"){
       //console.log("trying to disconnect.");
-      conn.write("105b015c16", "hex");
+      conn.write("105B015C16", "hex");
       //conn.end();
     }
   }
