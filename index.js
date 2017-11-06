@@ -28,7 +28,7 @@ function handleConnection(conn) {
     console.log('connection data from %s: %j', remoteAddress, d);
     if(d == "e5"){
       console.log("Ack received.");
-      currentConnection.write("1040014116", "hex");
+      currentConnection.write("107B017C16", "hex");
       //conn.end();
     }
   }
