@@ -73,8 +73,8 @@ function handleConnection(conn) {
       //currentMessage += d;
 
       //Header analysis
-      if( currentMessage != null && currentMessage.length > 12){
-          console.log("id: " + currentIteration + "Got response for: " + currentMessage.substring(10,2));
+      if( d != null && d.length > 12){
+          console.log("id: " + currentIteration + "Got response for: " + d.substring(10,2));
       }
 
       //Body validation (length + ending char)
