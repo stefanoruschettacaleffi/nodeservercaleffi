@@ -12,7 +12,7 @@ module.exports = {
 
   hex2int: function(hex){
     return parseInt(hex, 16);
-  }
+  },
 
   checksum: function(str){
 
