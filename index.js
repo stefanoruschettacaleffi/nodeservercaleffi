@@ -15,6 +15,7 @@ const TIMEOUT = 20000;
 var server = net.createServer();
 var currentIteration = 0;
 var timeoutCounter = null;
+var currentMessage = null;
 
 /*--- Life Cycle ---*/
 
@@ -65,7 +66,16 @@ function handleConnection(conn) {
       conn.write("107B" + id + crc + "16", "hex");
     }
     else {
+
       //Analysis
+      //currentMessage += d;
+
+      //Header analysis
+      //if(currentMessage.length > 8){
+      //}
+
+      //Body validation (length + ending char)
+
       //Next iteration
       nextDataIteration();
     }
