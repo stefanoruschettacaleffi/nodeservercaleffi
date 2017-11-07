@@ -39,10 +39,16 @@ function handleConnection(conn) {
   conn.once('close', onConnClose);
   conn.on('error', onConnError);
 
+  //Broadcast reset
+
+  var ck = utils.checksum("53FF5000");
+  conn.write("6804046853FF5000"+ck+"16", "hex");
+
   startDataHandling();
 
   function onConnData(d) {
     console.log('connection data from %s: %j', remoteAddress, d);
+
 
     if(d == "e5"){
       console.log("Ack received.");
