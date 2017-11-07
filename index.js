@@ -84,10 +84,10 @@ function handleConnection(conn) {
     var id = utils.int2hex(currentIteration);
     var crc = utils.checksum("40" + id);
 
-    var msg = "10" + id + crc + "16", "hex";
+    var msg = "10" + id + crc + "16";
     console.log("sending: " + msg);
 
-    conn.write(msg);
+    conn.write(msg, "hex");
   }
 
 
