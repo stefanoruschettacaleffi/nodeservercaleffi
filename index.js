@@ -14,7 +14,7 @@ const TIMEOUT = 5000;
 
 var server = net.createServer();
 var currentIteration = 0;
-var timeout = null;
+var timeoutCounter = null;
 
 /*--- Life Cycle ---*/
 
@@ -55,6 +55,7 @@ function handleConnection(conn) {
 
       console.log('id' + currentIteration +' Ack received.');
       stopTimeout();
+
       var id = utils.int2hex(currentIteration);
       var crc = utils.checksum("7B" + id);
 
@@ -96,7 +97,7 @@ function handleConnection(conn) {
 
     var msg = "1040" + id + crc + "16";
     startTimeout();
-    console.log('id' + currentIteration +'start rading. Sending: ' + msg);
+    console.log('id' + currentIteration +' start rading. Sending: ' + msg);
 
     conn.write(msg, "hex");
   }
@@ -108,13 +109,13 @@ function handleConnection(conn) {
 
 
   function startTimeout(){
-    timeout = setTimeout(function () {
+    timeoutCounter = setTimeout(function () {
       console.log('id' + currentIteration + ' on timeout!');
       nextDataIteration();
     },  TIMEOUT);
   }
 
   function stopTimeout(){
-      clearTimeout(timeout);
+      clearTimeout(timeoutCounter);
   }
 }
