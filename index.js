@@ -15,6 +15,7 @@ const TIMEOUT = 20000;
 var server = net.createServer();
 var currentIteration = 0;
 var timeoutCounter = null;
+var timeoutAck = null;
 var currentMessage = null;
 
 /*--- Life Cycle ---*/
@@ -66,12 +67,12 @@ function handleConnection(conn) {
       var crc = utils.checksum("7B" + id);
 
       conn.write("107B" + id + crc + "16", "hex");
+
     }
     else {
 
       //Analysis
       //currentMessage += d;
-
       //Header analysis
       if( d != null && d.length > 12){
           console.log("id: " + currentIteration + " Got response for: " + utils.hex2int(d.substring(10,12)));
@@ -121,6 +122,7 @@ function handleConnection(conn) {
 
 
   function endDataHandling() {
+    stopTimeout();
     conn.end();
   }
 
