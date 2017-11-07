@@ -10,6 +10,10 @@ module.exports = {
     return res;
   },
 
+  hex2int: function(hex){
+    return parseInt(hex, 16);
+  }
+
   checksum: function(str){
 
     var sum = 0;
@@ -18,7 +22,7 @@ module.exports = {
   	}
 
     var res = (sum%256).toString(16);
-    
+
     if(res.length == 1){
       res = "0"+res;
     }

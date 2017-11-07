@@ -74,7 +74,7 @@ function handleConnection(conn) {
 
       //Header analysis
       if( d != null && d.length > 12){
-          console.log("id: " + currentIteration + " Got response for: " + d.substring(10,12));
+          console.log("id: " + currentIteration + " Got response for: " + utils.hex2int(d.substring(10,12)));
       }
 
       //Body validation (length + ending char)
@@ -114,7 +114,7 @@ function handleConnection(conn) {
 
     var msg = "1040" + id + crc + "16";
     startTimeout();
-    console.log('id' + currentIteration +' start rading. Sending: ' + msg);
+    console.log('id' + currentIteration +' start reading. Sending: ' + msg);
 
     conn.write(msg, "hex");
   }
