@@ -7,7 +7,7 @@ var net = require('net');
 /*--- Const ----*/
 
 const MAX_DEVICES = 250;
-const TIMEOUT = 1500;
+const TIMEOUT = 5000;
 
 
 /*--- Attributes ----*/
@@ -42,16 +42,18 @@ function handleConnection(conn) {
   //Broadcast reset
 
   var ck = utils.checksum("53FF5000");
+  console.log("Sending broadcast reset.")
+
   conn.write("6804046853FF5000"+ck+"16", "hex");
 
   startDataHandling();
 
   function onConnData(d) {
-    console.log('connection data from %s: %j', remoteAddress, d);
-
+    console.log('id' + currentIteration +' connection data from %s: %j', remoteAddress, d);
 
     if(d == "e5"){
-      console.log("Ack received.");
+
+      console.log('id' + currentIteration +' Ack received.');
       stopTimeout();
       var id = utils.int2hex(currentIteration);
       var crc = utils.checksum("7B" + id);
@@ -94,7 +96,7 @@ function handleConnection(conn) {
 
     var msg = "1040" + id + crc + "16";
     startTimeout();
-    console.log("sending: " + msg);
+    console.log('id' + currentIteration +'start rading. Sending: ' + msg);
 
     conn.write(msg, "hex");
   }
@@ -107,6 +109,7 @@ function handleConnection(conn) {
 
   function startTimeout(){
     timeout = setTimeout(function () {
+      console.log('id' + currentIteration + ' on timeout!');
       nextDataIteration();
     },  TIMEOUT);
   }
