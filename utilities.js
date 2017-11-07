@@ -8,8 +8,7 @@ module.exports = {
       res = "0"+res;
     }
     return res;
-  }
-
+  },
 
   checksum: function(str){
 
