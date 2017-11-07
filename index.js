@@ -6,8 +6,8 @@ var net = require('net');
 
 /*--- Const ----*/
 
-var MAX_DEVICES = 250;
-var TIMEOUT = 20000;
+const MAX_DEVICES = 250;
+const TIMEOUT = 20000;
 
 
 /*--- Attributes ----*/
@@ -54,6 +54,7 @@ function handleConnection(conn) {
 
   function onConnData(d) {
 
+
     console.log('id' + currentIteration +' connection data from %s: %j', remoteAddress, d);
 
     if(d == "e5"){
@@ -72,8 +73,8 @@ function handleConnection(conn) {
       //currentMessage += d;
 
       //Header analysis
-      if(currentMessage.length > 8){
-          console.log("id: " + currentIteration + "Got response for: " + currentMessage.substr(10,2));
+      if(currentMessage.length > 12){
+          console.log("id: " + currentIteration + "Got response for: " + currentMessage.substring(10,2));
       }
 
       //Body validation (length + ending char)
@@ -94,13 +95,13 @@ function handleConnection(conn) {
 
 
   function startDataHandling() {
-    global.currentIteration = 0;
+    currentIteration = 0;
     nextDataIteration();
   }
 
 
   function nextDataIteration() {
-    global.currentIteration++;
+    currentIteration++;
 
     if(currentIteration > MAX_DEVICES ){
       endDataHandling();
