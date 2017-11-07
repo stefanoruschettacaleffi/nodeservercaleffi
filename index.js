@@ -106,6 +106,6 @@ function handleConnection(conn) {
   }
 
   function stopTimeout(){
-      cleartimeout(timeout);
+      clearTimeout(timeout);
   }
 }
