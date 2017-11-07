@@ -47,7 +47,7 @@ function handleConnection(conn) {
 
       var id = utils.int2hex(currentIteration);
       var crc = utils.checksum("7C" + id);
-      conn.write("10" + id + crc + "16", "hex");
+      conn.write("107C" + id + crc + "16", "hex");
     }
     else {
       //Analysis
@@ -84,7 +84,7 @@ function handleConnection(conn) {
     var id = utils.int2hex(currentIteration);
     var crc = utils.checksum("40" + id);
 
-    var msg = "10" + id + crc + "16";
+    var msg = "1040" + id + crc + "16";
     console.log("sending: " + msg);
 
     conn.write(msg, "hex");
