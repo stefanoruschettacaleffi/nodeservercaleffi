@@ -45,7 +45,7 @@ function handleConnection(conn) {
     if(d == "e5"){
       console.log("Ack received.");
 
-      var id = int2hex(currentIteration);
+      var id = utils.int2hex(currentIteration);
       var crc = utils.checksum("7C" + id);
       coon.write("10" + id + crc + "16", "hex");
     }
@@ -81,7 +81,7 @@ function handleConnection(conn) {
       return;
     }
 
-    var id = int2hex(currentIteration);
+    var id = utils.int2hex(currentIteration);
     var crc = utils.checksum("40" + id);
 
     conn.write("10" + id + crc + "16", "hex");
