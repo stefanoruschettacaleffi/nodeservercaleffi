@@ -7,12 +7,14 @@ var net = require('net');
 /*--- Const ----*/
 
 const MAX_DEVICES = 250;
+const TIMEOUT = 5000;
+
 
 /*--- Attributes ----*/
 
 var server = net.createServer();
 var currentIteration = 0;
-
+var timeout = null;
 
 /*--- Life Cycle ---*/
 
@@ -44,9 +46,10 @@ function handleConnection(conn) {
 
     if(d == "e5"){
       console.log("Ack received.");
-
+      stopTimeout();
       var id = utils.int2hex(currentIteration);
       var crc = utils.checksum("7B" + id);
+
       conn.write("107B" + id + crc + "16", "hex");
     }
     else {
@@ -62,21 +65,20 @@ function handleConnection(conn) {
 
 
   function onConnError(err) {
-    console.log('Connection %s error: %s', remoteAddress, err.message);
+    console.log('connection %s error: %s', remoteAddress, err.message);
   }
 
 
-  function startDataHandling(){
+  function startDataHandling() {
     currentIteration = 0;
     nextDataIteration();
   }
 
 
-  function nextDataIteration(){
+  function nextDataIteration() {
     currentIteration++;
 
-    if(currentIteration > MAX_DEVICES )
-    {
+    if(currentIteration > MAX_DEVICES ){
       endDataHandling();
       return;
     }
@@ -85,13 +87,25 @@ function handleConnection(conn) {
     var crc = utils.checksum("40" + id);
 
     var msg = "1040" + id + crc + "16";
+    startTimeout();
     console.log("sending: " + msg);
 
     conn.write(msg, "hex");
   }
 
 
-  function endDataHandling(){
+  function endDataHandling() {
     conn.end();
+  }
+
+
+  function startTimeout(){
+    timeout = setTimeout(function () {
+      nextDataIteration();
+    },  TIMEOUT);
+  }
+
+  function stopTimeout(){
+      cleartimeout(timeout);
   }
 }
