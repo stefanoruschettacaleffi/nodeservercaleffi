@@ -74,7 +74,7 @@ function handleConnection(conn) {
 
       //Header analysis
       if( d != null && d.length > 12){
-          console.log("id: " + currentIteration + "Got response for: " + d.substring(10,2));
+          console.log("id: " + currentIteration + " Got response for: " + d.substring(10,12));
       }
 
       //Body validation (length + ending char)
@@ -102,6 +102,7 @@ function handleConnection(conn) {
 
   function nextDataIteration() {
     currentIteration++;
+    stopTimeout();
 
     if(currentIteration > MAX_DEVICES ){
       endDataHandling();
