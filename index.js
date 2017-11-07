@@ -46,8 +46,8 @@ function handleConnection(conn) {
       console.log("Ack received.");
 
       var id = utils.int2hex(currentIteration);
-      var crc = utils.checksum("7C" + id);
-      conn.write("107C" + id + crc + "16", "hex");
+      var crc = utils.checksum("7B" + id);
+      conn.write("107B" + id + crc + "16", "hex");
     }
     else {
       //Analysis
