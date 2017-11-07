@@ -1,17 +1,34 @@
+/*--- Imports ---*/
+
+var utils = require('./utilities');
 var net = require('net');
 
+
+/*--- Const ----*/
+
+const MAX_DEVICES = 250;
+
+/*--- Attributes ----*/
+
 var server = net.createServer();
+var currentIteration = 0;
+
+
+/*--- Life Cycle ---*/
+
 server.on('connection', handleConnection);
+
 
 server.listen(3000, function() {
   console.log('server listening to %j', server.address());
 });
 
 
-var currentConnection = null;
 
 function handleConnection(conn) {
   var remoteAddress = conn.remoteAddress + ':' + conn.remotePort;
+
+  //Open connection
   console.log('new client connection from %s', remoteAddress);
 
   conn.setEncoding('hex');
@@ -20,18 +37,22 @@ function handleConnection(conn) {
   conn.once('close', onConnClose);
   conn.on('error', onConnError);
 
-  conn.write("1040014116", "hex");
-
-  currentConnection = conn;
+  startDataHandling();
 
   function onConnData(d) {
     console.log('connection data from %s: %j', remoteAddress, d);
+
     if(d == "e5"){
       console.log("Ack received.");
-      conn.write("107B017C16", "hex");
+
+      var id = int2hex(currentIteration);
+      var crc = utils.checksum("7C" + id);
+      coon.write("10" + id + crc + "16", "hex");
     }
     else {
-      conn.end();
+      //Analysis
+      //Next iteration
+      nextDataIteration();
     }
   }
 
@@ -39,7 +60,35 @@ function handleConnection(conn) {
     console.log('connection from %s closed', remoteAddress);
   }
 
+
   function onConnError(err) {
     console.log('Connection %s error: %s', remoteAddress, err.message);
+  }
+
+
+  function startDataHandling(){
+    currentIteration = 0;
+    nextDataIteration();
+  }
+
+
+  function nextDataIteration(){
+    currentIteration++;
+
+    if(currentIteration > MAX_DEVICES )
+    {
+      endDataHandling();
+      return;
+    }
+
+    var id = int2hex(currentIteration);
+    var crc = utils.checksum("40" + id);
+
+    conn.write("10" + id + crc + "16", "hex");
+  }
+
+
+  function endDataHandling(){
+    conn.end();
   }
 }
