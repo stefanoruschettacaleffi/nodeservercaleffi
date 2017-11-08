@@ -23,12 +23,12 @@ var currentMessage = null;
 
 server.on('connection', handleConnection);
 
-
 server.listen(3000, function() {
   console.log('server listening to %j', server.address());
 });
 
 
+/*--- Connection ---*/
 
 function handleConnection(conn) {
   var remoteAddress = conn.remoteAddress + ':' + conn.remotePort;
@@ -57,11 +57,11 @@ function handleConnection(conn) {
   function onConnData(d) {
 
 
-    console.log('id' + currentIteration +' connection data from %s: %j', remoteAddress, d);
+    console.log('Id' + currentIteration +' connection data from %s: %j', remoteAddress, d);
 
     if(d == "e5"){
 
-      console.log('id' + currentIteration +' Ack received.');
+      console.log('Id' + currentIteration +' Ack received.');
       stopTimeout();
 
       sendMsgReqOnConn();
@@ -69,11 +69,10 @@ function handleConnection(conn) {
     }
     else {
       stopMsgTimeout();
-      //Analysis
-      //currentMessage += d;
+
       //Header analysis
       if( d != null && d.length > 12){
-          console.log("id: " + currentIteration + " Got response for: " + utils.hex2int(d.substring(10,12)));
+          console.log("Id: " + currentIteration + " Got response for: " + utils.hex2int(d.substring(10,12)));
       }
 
       //Body validation (length + ending char)
@@ -128,7 +127,7 @@ function handleConnection(conn) {
     var msg = "1040" + id + crc + "16";
     startAckTimeout();
 
-    console.log('id' + currentIteration +' sending Ack request. Sending: ' + msg);
+    console.log('Id' + currentIteration +' sending Ack request. Sending: ' + msg);
 
     conn.write(msg, "hex");
   }
@@ -144,7 +143,7 @@ function handleConnection(conn) {
 
   function startAckTimeout(){
     timeoutAck = setTimeout(function () {
-      console.log('id' + currentIteration + ' on timeout!');
+      console.log('Id' + currentIteration + ' on timeout!');
       nextDataIteration();
     },  ACK_TIMEOUT);
   }
@@ -155,7 +154,7 @@ function handleConnection(conn) {
 
   function startMsgTimeout(){
     timeoutMsg = setTimeout(function () {
-      console.log('id' + currentIteration + ' repeat message request');
+      console.log('Id' + currentIteration + ' repeat message request');
       sendMsgReqOnConn(conn);
     },  MSG_TIMEOUT);
   }
