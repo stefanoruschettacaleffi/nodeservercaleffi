@@ -7,14 +7,15 @@ var net = require('net');
 /*--- Const ----*/
 
 const MAX_DEVICES = 250;
-const TIMEOUT = 20000;
+const ACK_TIMEOUT = 20000;
+const MSG_TIMEOUT = 2000;
 
 
 /*--- Attributes ----*/
 
 var server = net.createServer();
 var currentIteration = 0;
-var timeoutCounter = null;
+var timeoutMsg = null;
 var timeoutAck = null;
 var currentMessage = null;
 
@@ -63,14 +64,11 @@ function handleConnection(conn) {
       console.log('id' + currentIteration +' Ack received.');
       stopTimeout();
 
-      var id = utils.int2hex(currentIteration);
-      var crc = utils.checksum("7B" + id);
-
-      conn.write("107B" + id + crc + "16", "hex");
-
+      sendMsgReqOnConn();
+      startMsgTimeout();
     }
     else {
-
+      stopMsgTimeout();
       //Analysis
       //currentMessage += d;
       //Header analysis
@@ -103,38 +101,66 @@ function handleConnection(conn) {
 
   function nextDataIteration() {
     currentIteration++;
-    stopTimeout();
+    stopAckTimeout();
+    stopMsgTimeout();
 
     if(currentIteration > MAX_DEVICES ){
       endDataHandling();
       return;
     }
 
+    sendAckReqOnConn(conn);
+  }
+
+
+  function endDataHandling() {
+    stopAckTimeout();
+    stopMsgTimeout();
+    conn.end();
+  }
+
+
+  function sendAckReqOnConn() {
+
     var id = utils.int2hex(currentIteration);
     var crc = utils.checksum("40" + id);
 
     var msg = "1040" + id + crc + "16";
-    startTimeout();
-    console.log('id' + currentIteration +' start reading. Sending: ' + msg);
+    startAckTimeout();
+
+    console.log('id' + currentIteration +' sending Ack request. Sending: ' + msg);
 
     conn.write(msg, "hex");
   }
 
 
-  function endDataHandling() {
-    stopTimeout();
-    conn.end();
+  function sendMsgReqOnConn() {
+    var id = utils.int2hex(currentIteration);
+    var crc = utils.checksum("7B" + id);
+
+    conn.write("107B" + id + crc + "16", "hex");
   }
 
 
-  function startTimeout(){
-    timeoutCounter = setTimeout(function () {
+  function startAckTimeout(){
+    timeoutAck = setTimeout(function () {
       console.log('id' + currentIteration + ' on timeout!');
       nextDataIteration();
-    },  TIMEOUT);
+    },  ACK_TIMEOUT);
   }
 
-  function stopTimeout(){
-      clearTimeout(timeoutCounter);
+  function stopAckTimeout(){
+      clearTimeout(timeoutAck);
+  }
+
+  function startMsgTimeout(){
+    timeoutMsg = setTimeout(function () {
+      console.log('id' + currentIteration + ' repeat message request');
+      sendMsgReqOnConn(conn);
+    },  MSG_TIMEOUT);
+  }
+
+  function stopMsgTimeout(){
+      clearTimeout(timeoutMsg);
   }
 }
