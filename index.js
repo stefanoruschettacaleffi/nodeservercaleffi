@@ -8,14 +8,14 @@ var net = require('net');
 
 const MAX_DEVICES = 250;
 const ACK_TIMEOUT = 20000;
-const MSG_TIMEOUT = 2000;
+//const MSG_TIMEOUT = 2000;
 
 
 /*--- Attributes ----*/
 
 var server = net.createServer();
 var currentIteration = 0;
-var timeoutMsg = null;
+//var timeoutMsg = null;
 var timeoutAck = null;
 var currentMessage = null;
 
@@ -64,10 +64,10 @@ function handleConnection(conn) {
       stopAckTimeout();
 
       sendMsgReqOnConn();
-      startMsgTimeout();
+      //startMsgTimeout();
     }
     else {
-      stopMsgTimeout();
+      //stopMsgTimeout();
 
       //Header analysis
       if( d != null && d.length > 12){
@@ -100,7 +100,7 @@ function handleConnection(conn) {
   function nextDataIteration() {
     currentIteration++;
     stopAckTimeout();
-    stopMsgTimeout();
+    //stopMsgTimeout();
 
     if(currentIteration > MAX_DEVICES ){
       endDataHandling();
@@ -113,7 +113,7 @@ function handleConnection(conn) {
 
   function endDataHandling() {
     stopAckTimeout();
-    stopMsgTimeout();
+    //stopMsgTimeout();
     conn.end();
   }
 
