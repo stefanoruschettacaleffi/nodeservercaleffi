@@ -56,13 +56,12 @@ function handleConnection(conn) {
 
   function onConnData(d) {
 
-
     console.log('Id' + currentIteration +' connection data from %s: %j', remoteAddress, d);
 
     if(d == "e5"){
 
       console.log('Id' + currentIteration +' Ack received.');
-      stopTimeout();
+      stopAckTimeout();
 
       sendMsgReqOnConn();
       startMsgTimeout();
