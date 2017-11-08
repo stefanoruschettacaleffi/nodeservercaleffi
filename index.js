@@ -7,7 +7,7 @@ var net = require('net');
 /*--- Const ----*/
 
 const MAX_DEVICES = 250;
-const TIMEOUT = 20000;
+const TIMEOUT = 10000;
 
 
 /*--- Attributes ----*/
