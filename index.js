@@ -7,14 +7,15 @@ var net = require('net');
 /*--- Const ----*/
 
 const MAX_DEVICES = 250;
-const TIMEOUT = 10000;
+const ACK_TIMEOUT = 20000;
+const MSG_TIMEOUT = 2000;
 
 
 /*--- Attributes ----*/
 
 var server = net.createServer();
 var currentIteration = 0;
-var timeoutCounter = null;
+var timeoutMsg = null;
 var timeoutAck = null;
 var currentMessage = null;
 
@@ -22,12 +23,12 @@ var currentMessage = null;
 
 server.on('connection', handleConnection);
 
-
 server.listen(3000, function() {
   console.log('server listening to %j', server.address());
 });
 
 
+/*--- Connection ---*/
 
 function handleConnection(conn) {
   var remoteAddress = conn.remoteAddress + ':' + conn.remotePort;
@@ -55,27 +56,22 @@ function handleConnection(conn) {
 
   function onConnData(d) {
 
-
-    console.log('id' + currentIteration +' connection data from %s: %j', remoteAddress, d);
+    console.log('Id' + currentIteration +' connection data from %s: %j', remoteAddress, d);
 
     if(d == "e5"){
 
-      console.log('id' + currentIteration +' Ack received.');
-      stopTimeout();
+      console.log('Id' + currentIteration +' Ack received.');
+      stopAckTimeout();
 
-      var id = utils.int2hex(currentIteration);
-      var crc = utils.checksum("7B" + id);
-
-      conn.write("107B" + id + crc + "16", "hex");
-
+      sendMsgReqOnConn();
+      startMsgTimeout();
     }
     else {
+      stopMsgTimeout();
 
-      //Analysis
-      //currentMessage += d;
       //Header analysis
       if( d != null && d.length > 12){
-          console.log("id: " + currentIteration + " Got response for: " + utils.hex2int(d.substring(10,12)));
+          console.log("Id: " + currentIteration + " Got response for: " + utils.hex2int(d.substring(10,12)));
       }
 
       //Body validation (length + ending char)
@@ -103,38 +99,66 @@ function handleConnection(conn) {
 
   function nextDataIteration() {
     currentIteration++;
-    stopTimeout();
+    stopAckTimeout();
+    stopMsgTimeout();
 
     if(currentIteration > MAX_DEVICES ){
       endDataHandling();
       return;
     }
 
+    sendAckReqOnConn(conn);
+  }
+
+
+  function endDataHandling() {
+    stopAckTimeout();
+    stopMsgTimeout();
+    conn.end();
+  }
+
+
+  function sendAckReqOnConn() {
+
     var id = utils.int2hex(currentIteration);
     var crc = utils.checksum("40" + id);
 
     var msg = "1040" + id + crc + "16";
-    startTimeout();
-    console.log('id' + currentIteration +' start reading. Sending: ' + msg);
+    startAckTimeout();
+
+    console.log('Id' + currentIteration +' sending Ack request. Sending: ' + msg);
 
     conn.write(msg, "hex");
   }
 
 
-  function endDataHandling() {
-    stopTimeout();
-    conn.end();
+  function sendMsgReqOnConn() {
+    var id = utils.int2hex(currentIteration);
+    var crc = utils.checksum("7B" + id);
+
+    conn.write("107B" + id + crc + "16", "hex");
   }
 
 
-  function startTimeout(){
-    timeoutCounter = setTimeout(function () {
-      console.log('id' + currentIteration + ' on timeout!');
+  function startAckTimeout(){
+    timeoutAck = setTimeout(function () {
+      console.log('Id' + currentIteration + ' on timeout!');
       nextDataIteration();
-    },  TIMEOUT);
+    },  ACK_TIMEOUT);
   }
 
-  function stopTimeout(){
-      clearTimeout(timeoutCounter);
+  function stopAckTimeout(){
+      clearTimeout(timeoutAck);
+  }
+
+  function startMsgTimeout(){
+    timeoutMsg = setTimeout(function () {
+      console.log('Id' + currentIteration + ' repeat message request');
+      sendMsgReqOnConn(conn);
+    },  MSG_TIMEOUT);
+  }
+
+  function stopMsgTimeout(){
+      clearTimeout(timeoutMsg);
   }
 }
