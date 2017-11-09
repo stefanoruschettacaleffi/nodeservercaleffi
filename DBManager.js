@@ -52,9 +52,4 @@ module.exports = {
         }
       });
   }
-
-
-  addMeasure : function(){
-
-  }
 }
