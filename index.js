@@ -3,23 +3,38 @@
 var utils = require('./utilities');
 var net = require('net');
 
+var dbmanager = require('./DBManager');
+
 
 /*--- Const ----*/
 
 const MAX_DEVICES = 250;
 const ACK_TIMEOUT = 20000;
-//const MSG_TIMEOUT = 2000;
 
 
 /*--- Attributes ----*/
 
 var server = net.createServer();
 var currentIteration = 0;
-//var timeoutMsg = null;
 var timeoutAck = null;
 var currentMessage = null;
 
+
 /*--- Life Cycle ---*/
+/*
+dbmanager.connectToMySQL("127.0.0.1", "root", "paolinopollo", function(con){
+
+    var db_name = "caleffi_db";
+
+    dbmanager.createDBOnConn(con, db_name, function(){
+
+      dbmanager.createMeasuresTableOnDB(con, db_name, function(){
+
+      });
+    });
+});
+*/
+
 
 server.on('connection', handleConnection);
 
@@ -64,10 +79,8 @@ function handleConnection(conn) {
       stopAckTimeout();
 
       sendMsgReqOnConn();
-      //startMsgTimeout();
     }
     else {
-      //stopMsgTimeout();
 
       //Header analysis
       if( d != null && d.length > 12){
@@ -100,7 +113,6 @@ function handleConnection(conn) {
   function nextDataIteration() {
     currentIteration++;
     stopAckTimeout();
-    //stopMsgTimeout();
 
     if(currentIteration > MAX_DEVICES ){
       endDataHandling();
@@ -113,7 +125,6 @@ function handleConnection(conn) {
 
   function endDataHandling() {
     stopAckTimeout();
-    //stopMsgTimeout();
     conn.end();
   }
 
