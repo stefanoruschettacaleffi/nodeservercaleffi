@@ -33,7 +33,7 @@ dbmanager.connectToMySQL("127.0.0.1", "root", "paolinopollo", function(con){
       });
     });
 });
-*/
+
 
 
 server.on('connection', handleConnection);
@@ -41,7 +41,7 @@ server.on('connection', handleConnection);
 server.listen(3000, function() {
   console.log('server listening to %j', server.address());
 });
-
+*/
 
 /*--- Connection ---*/
 
