@@ -135,11 +135,11 @@ function handleConnection(conn) {
     var crc = utils.checksum("40" + id);
 
     var msg = "1040" + id + crc + "16";
-    startAckTimeout();
 
     console.log('Id' + currentIteration +' sending Ack request. Sending: ' + msg);
 
     conn.write(msg, "hex");
+    startAckTimeout();
   }
 
 
@@ -161,7 +161,7 @@ function handleConnection(conn) {
   function stopAckTimeout(){
       clearTimeout(timeoutAck);
   }
-
+  /*
   function startMsgTimeout(){
     timeoutMsg = setTimeout(function () {
       console.log('Id' + currentIteration + ' repeat message request');
@@ -172,4 +172,5 @@ function handleConnection(conn) {
   function stopMsgTimeout(){
       clearTimeout(timeoutMsg);
   }
+  */
 }
