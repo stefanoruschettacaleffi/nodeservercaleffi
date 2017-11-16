@@ -59,15 +59,15 @@ function handleConnection(conn) {
 
   //Broadcast reset
 
-  var ck = utils.checksum("53FF5000");
+  //var ck = utils.checksum("53FF5000");
   //var ck = utils.checksum("73FF50");
-  console.log("Sending broadcast reset.")
+  //console.log("Sending broadcast reset.")
 
-  conn.write("6804046853FF5000"+ck+"16", "hex");
+  //conn.write("6804046853FF5000"+ck+"16", "hex");
   //conn.write("6803036873FF50" + ck + "16", "hex");
 
-  ck = utils.checksum("73FF51085B5F3B2B3E2E7C01437C01637C01757C01557C01497C0161");
-  conn.write("6828286873FF51085B5F3B2B3E2E7C01437C01637C01757C01557C01497C0161"+ck+"16", "hex");
+  //ck = utils.checksum("73FF51085B5F3B2B3E2E7C01437C01637C01757C01557C01497C0161");
+  //conn.write("6828286873FF51085B5F3B2B3E2E7C01437C01637C01757C01557C01497C0161"+ck+"16", "hex");
 
   startDataHandling();
 
